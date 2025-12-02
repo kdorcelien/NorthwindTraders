@@ -6,8 +6,8 @@ public class Query {
     public static void main(String[] args) throws SQLException, ClassNotFoundException {
         Class.forName("com.mysql.cj.jdbc.Driver");
 
-        Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/northwind", "root",
-                "");
+        Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/northwind", args[0],
+                args[1]);
 
         String query = "SELECT ProductId, ProductName, UnitPrice, UnitsInStock FROM Products WHERE ProductId = ? OR ProductName LIKE ?";
 
