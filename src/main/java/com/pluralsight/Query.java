@@ -10,16 +10,9 @@ public class Query {
     static ResultSet results;
 
     public static void main(String[] args) throws SQLException, ClassNotFoundException {
-try {
     openConnection(args);
     menuDisplay();
-} catch (SQLException e) {
-    throw new RuntimeException(e);
-} catch (ClassNotFoundException e) {
-    throw new RuntimeException(e);
-}finally {
-    closeConnection();
-}
+
 
 
     }
@@ -50,9 +43,12 @@ try {
             }
             case 2 -> displayCustomers();
             case 0 -> {
+                try{
                 System.out.println("Au-Revoir");
                 scan.close();
-                closeConnection();
+            } finally {
+                    closeConnection();
+                }
             }
         }
     }
