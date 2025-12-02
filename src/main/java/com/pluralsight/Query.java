@@ -6,8 +6,7 @@ import java.util.Scanner;
 public class Query {
     final static Scanner scan = new Scanner(System.in);
     static Connection connection;
-    static Statement statement;
-    static ResultSet results;
+
 
     public static void main(String[] args) throws SQLException, ClassNotFoundException {
     openConnection(args);
@@ -30,6 +29,8 @@ public class Query {
         System.out.println("What do you want to do?\n" +
                 "1) Display all products\n" +
                 "2) Display all customers\n" +
+                "3) Display all categories\n" +
+                "4) Product By Category\n" +
                 "0) Exit\n" +
                 "Select an option: ");
 
@@ -42,6 +43,11 @@ public class Query {
                 displayProducts();
             }
             case 2 -> displayCustomers();
+            case 3 ->{
+                System.out.println("Enter desired Category ID");
+                displayCategories();
+            }
+            case 4 -> ProductByCategory();
             case 0 -> {
                 try{
                 System.out.println("Au-Revoir");
@@ -55,10 +61,10 @@ public class Query {
 
     public static void displayProducts() throws SQLException, ClassNotFoundException {
         String query = "SELECT * FROM Products";
-        try {
+        try (PreparedStatement statement = connection.prepareStatement(query);
+             ResultSet results = statement.executeQuery()){
 
-            statement = connection.createStatement();
-            results = statement.executeQuery(query);
+
 
             while (results.next()) {
                 int id = results.getInt("ProductId");
@@ -77,12 +83,9 @@ public class Query {
 
     public static void displayCustomers() throws SQLException, ClassNotFoundException {
         String query = "SELECT * FROM Customers ORDER BY Country";
-        try {
-
-            statement = connection.createStatement();
-
-
-            results = statement.executeQuery(query);
+        try(PreparedStatement statement = connection.prepareStatement(query);
+            ResultSet results = statement.executeQuery()
+        ){
 
             while (results.next()) {
                 String contactName = results.getString("ContactName");
@@ -99,22 +102,45 @@ public class Query {
         }
     }
 
-    public static void closeConnection() throws SQLException {
+public static void displayCategories() throws SQLException {
+    String query = "SELECT * FROM Categories ORDER BY CategoryID";
+    try (PreparedStatement statement = connection.prepareStatement(query);
+         ResultSet results = statement.executeQuery()
+    ) {
 
-            if (results != null) {
-                try {
-                    results.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
+
+        while (results.next()) {
+            System.out.println("ID:  "+ results.getString("CategoryID"));
+            System.out.println("Name:  "+ results.getString("CategoryName"));
+            System.out.println("--------------------------------------------------------");
+        }
+    }
+}
+public static void ProductByCategory() throws SQLException {
+    String query = "SELECT * FROM Products WHERE CategoryID = ? ORDER BY CategoryID";
+    System.out.println("Enter desired category ID");
+    int id = scan.nextInt();
+    scan.nextLine();
+
+
+    try (PreparedStatement statement = connection.prepareStatement(query);
+    ) {
+        statement.setInt(1, id);
+        try (ResultSet results = statement.executeQuery()) {
+
+
+            while (results.next()) {
+                System.out.println("ID:  " + results.getString("CategoryID"));
+                System.out.println("Name: " + results.getString("ProductName"));
+                System.out.println("--------------------------------------------------------");
             }
-            if (statement != null) {
-                try {
-                    statement.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
+        }
+    }
+}
+
+
+    public static void closeConnection() {
+
             if (connection != null) {
                 try {
                     connection.close();
