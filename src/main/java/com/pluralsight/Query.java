@@ -1,28 +1,36 @@
 package com.pluralsight;
 
 import java.sql.*;
+import org.apache.commons.dbcp2.BasicDataSource;
 import java.util.Scanner;
 
 public class Query {
     final static Scanner scan = new Scanner(System.in);
     static Connection connection;
+    private static final String url = "jdbc:mysql://127.0.0.1:3306/";
 
 
     public static void main(String[] args) throws SQLException, ClassNotFoundException {
-    openConnection(args);
+    openConnection("northwind", args[0], args[1]);
     menuDisplay();
 
 
 
     }
 
-    public static void openConnection(String[] args) throws SQLException, ClassNotFoundException {
-        Class.forName("com.mysql.cj.jdbc.Driver");
-        connection = DriverManager.getConnection(
-                "jdbc:mysql://localhost:3306/northwind",
-                args[0],
-                args[1]
-        );
+    public static void openConnection(String database, String username, String password) throws SQLException, ClassNotFoundException {
+        BasicDataSource dataSource = new BasicDataSource();
+        dataSource.setUrl(url + database);
+        dataSource.setUsername(username);
+        dataSource.setPassword(password);
+
+        try {
+            connection = dataSource.getConnection();
+        } catch (SQLException e) {
+            System.out.println("Error when loading connection. Exiting application.");
+            e.printStackTrace();
+            System.exit(1);
+        }
     }
 
     public static void menuDisplay() throws SQLException, ClassNotFoundException {
