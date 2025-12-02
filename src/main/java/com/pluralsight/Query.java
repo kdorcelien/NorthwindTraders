@@ -26,34 +26,38 @@ public class Query {
     }
 
     public static void menuDisplay() throws SQLException, ClassNotFoundException {
-        System.out.println("What do you want to do?\n" +
-                "1) Display all products\n" +
-                "2) Display all customers\n" +
-                "3) Display all categories\n" +
-                "4) Product By Category\n" +
-                "0) Exit\n" +
-                "Select an option: ");
+        int option = -1;
 
-        int option = scan.nextInt();
-        scan.nextLine();
+        while (option != 0) {
+            System.out.println("What do you want to do?\n" +
+                    "1) Display all products\n" +
+                    "2) Display all customers\n" +
+                    "3) Display all categories\n" +
+                    "4) Product By Category\n" +
+                    "0) Exit\n" +
+                    "Select an option: ");
+
+             option = scan.nextInt();
+            scan.nextLine();
 
 
-        switch (option) {
-            case 1 -> {
-                displayProducts();
-            }
-            case 2 -> displayCustomers();
-            case 3 ->{
-                System.out.println("Enter desired Category ID");
-                displayCategories();
-            }
-            case 4 -> ProductByCategory();
-            case 0 -> {
-                try{
-                System.out.println("Au-Revoir");
-                scan.close();
-            } finally {
-                    closeConnection();
+            switch (option) {
+                case 1 -> {
+                    displayProducts();
+                }
+                case 2 -> displayCustomers();
+                case 3 -> {
+                    System.out.println("Enter desired Category ID");
+                    displayCategories();
+                }
+                case 4 -> ProductByCategory();
+                case 0 -> {
+                    try {
+                        System.out.println("Au-Revoir");
+                        scan.close();
+                    } finally {
+                        closeConnection();
+                    }
                 }
             }
         }
