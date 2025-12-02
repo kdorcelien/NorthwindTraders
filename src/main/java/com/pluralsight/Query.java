@@ -7,7 +7,7 @@ public class Query {
         Class.forName("com.mysql.cj.jdbc.Driver");
 
         Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/northwind", "root",
-                "Olie_Corsaire001!");
+                "");
 
         String query = "SELECT ProductId, ProductName, UnitPrice, UnitsInStock FROM Products WHERE ProductId = ? OR ProductName LIKE ?";
 
