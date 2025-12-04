@@ -3,12 +3,15 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 
+.env
+
 ### IntelliJ IDEA ###
 .idea/modules.xml
 .idea/jarRepositories.xml
 .idea/compiler.xml
 .idea/libraries/
 .idea/workspace.xml
+.idea/
 *.iws
 *.iml
 *.ipr
